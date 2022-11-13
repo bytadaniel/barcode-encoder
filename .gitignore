@@ -1,6 +1,4 @@
 .DS_Store
 /node_modules
 /lib
-
-*.test.ts
-test.ts
+/test.ts
