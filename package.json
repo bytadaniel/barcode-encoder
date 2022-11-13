@@ -1,7 +1,7 @@
 {
-  "name": "barcode-generator",
+  "name": "barcode-encoder",
   "version": "1.0.0",
-  "description": "Raw barcode generator without drawing",
+  "description": "barcode encode without graphics",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "module": "lib/esm/index.js",
