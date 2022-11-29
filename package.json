@@ -1,6 +1,6 @@
 {
   "name": "barcode-encoder",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "barcode encode without graphics",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
