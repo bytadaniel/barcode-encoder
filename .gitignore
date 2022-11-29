@@ -1,4 +1,5 @@
 .DS_Store
 /node_modules
 /lib
+/dev-src
 /test.ts

@@ -1,4 +1,4 @@
-import type { BarcodeOptions } from "../core/interface";
+import type { BarcodeOptions } from '../interface'
 
 export interface Code128Options extends BarcodeOptions {
     ean128?: boolean

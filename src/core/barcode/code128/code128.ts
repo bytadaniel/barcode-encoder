@@ -1,4 +1,5 @@
-import { Barcode } from '../core/abstract-barcode';
+import { Barcode } from '../abstract-barcode';
+import type { BarcodeEncoded } from '../interface';
 import { SHIFT, SET_A, SET_B, MODULO, STOP, FNC1, SET_BY_CODE, SWAP, BARS } from './constants';
 import type { Code128Options } from './interface';
 
@@ -14,7 +15,7 @@ export class Code128 extends Barcode {
 	options: Code128Options;
 
 	constructor(input: string, options: Code128Options = {}) {
-		super(input.substring(1));
+		super(input.substr(1));
 
 		this.options = options
 
@@ -28,7 +29,7 @@ export class Code128 extends Barcode {
 	}
 
 	// The public encoding function
-	public encode() {
+	public encode(): BarcodeEncoded[] {
 		const bytes = this.bytes;
 		// Remove the start code from the bytes and set its index
 		const startIndex = this.bytes.shift()! - 105;
@@ -46,7 +47,7 @@ export class Code128 extends Barcode {
 		// Start encode with the right type
 		const encodingResult = Code128.next(bytes, 1, startSet);
 
-		return {
+		return [{
 			input: this.input.replace(/[^\x20-\x7E]/g, ''),
 			encoded: [
 				// Add the start bits
@@ -58,7 +59,7 @@ export class Code128 extends Barcode {
 				// Add the end bits
 				Code128.getBar(STOP)
 			].join('')
-		};
+		}]
 	}
 
 	// GS1-128/EAN-128

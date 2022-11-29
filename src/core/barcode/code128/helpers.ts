@@ -14,7 +14,7 @@ function autoSelectFromAB(string: string, isA: boolean): string{
 		return (
 			untilC[1] +
 			String.fromCharCode(204) +
-			autoSelectFromC(string.substring(untilC[1].length))
+			autoSelectFromC(string.substr(untilC[1].length))
 		);
 	}
 
@@ -27,7 +27,7 @@ function autoSelectFromAB(string: string, isA: boolean): string{
 	return (
 		chars +
 		String.fromCharCode(isA ? 205 : 206) +
-		autoSelectFromAB(string.substring(chars.length), !isA)
+		autoSelectFromAB(string.substr(chars.length), !isA)
 	);
 }
 
@@ -40,7 +40,7 @@ function autoSelectFromC(string: string): string {
 		return string;
 	}
 
-	string = string.substring(length);
+	string = string.substr(length);
 
 	// Select A/B depending on the longest match
 	const isA = matchSetALength(string) >= matchSetBLength(string);

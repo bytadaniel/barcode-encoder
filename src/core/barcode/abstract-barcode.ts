@@ -7,9 +7,9 @@ export abstract class Barcode {
 		this.input = input
 	}
 
-    public abstract valid(): boolean
+    // public abstract valid(): boolean
 
-    public abstract encode(): BarcodeEncoded
+    public abstract encode(): BarcodeEncoded[]
 }
 
 export interface BarcodeRef {

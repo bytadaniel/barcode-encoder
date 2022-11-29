@@ -1,0 +1,1 @@
+export { drawSticker } from './draw-sticker'
