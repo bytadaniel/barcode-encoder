@@ -70,6 +70,7 @@ export function drawSticker (page: PDFPage, font: PDFFont, options: {
 
     // сеточная разметка (не удалять)
     // разметка контента
+    /*
     page.drawRectangle({
       width: contentWidth,
       height: options.height,
@@ -96,7 +97,7 @@ export function drawSticker (page: PDFPage, font: PDFFont, options: {
       color: rgb(1, 0, 0),
       opacity: 0.25
     })
-  
+    */
 
     /**
      * Draw background color on test stafe

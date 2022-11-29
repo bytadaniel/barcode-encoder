@@ -1,5 +1,5 @@
 import fontkit from '@pdf-lib/fontkit'
-import { PDFDocument, rgb } from "pdf-lib"
+import { PDFDocument } from "pdf-lib"
 import { arrangeElementsOnPapers } from "../paper/arrange-elements-on-papers"
 import * as utils from '../utils'
 import * as sticker from './sticker'
@@ -43,7 +43,7 @@ export interface StickersContract {
 
 
 export async function createPdfStickers (contract: StickersContract) {
-	console.time('createPdfStickers')
+	// console.time('createPdfStickers')
 
 	const pdf = await PDFDocument.create()
 
@@ -107,6 +107,8 @@ export async function createPdfStickers (contract: StickersContract) {
 
 		const page = pdf.addPage([paperWidth, paperHeight])
 
+		// Разметка оффсетов
+		/*
 		page.drawRectangle({
 			x: 0,
 			width: page.getWidth(),
@@ -115,7 +117,6 @@ export async function createPdfStickers (contract: StickersContract) {
 			color: rgb(0, 1, 0),
 			opacity: 0.5
 		})
-
 		page.drawRectangle({
 			x: 0,
 			width: page.getWidth(),
@@ -124,7 +125,6 @@ export async function createPdfStickers (contract: StickersContract) {
 			color: rgb(0, 1, 0),
 			opacity: 0.5
 		})
-
 		page.drawRectangle({
 			x: 0,
 			width: paperPaddingWidth,
@@ -133,7 +133,6 @@ export async function createPdfStickers (contract: StickersContract) {
 			color: rgb(0, 1, 0),
 			opacity: 0.5
 		})
-
 		page.drawRectangle({
 			x: page.getWidth() - paperPaddingWidth,
 			width: paperPaddingWidth,
@@ -142,7 +141,7 @@ export async function createPdfStickers (contract: StickersContract) {
 			color: rgb(0, 1, 0),
 			opacity: 0.5
 		})
-
+		*/
 		for (const [rowIndex, row] of paper.matrix.entries()) {
 			for (const [columnIndex, elementWithCursor] of row.entries()) {
 				const { element } = elementWithCursor
@@ -178,12 +177,10 @@ export async function createPdfStickers (contract: StickersContract) {
 		}
 	}
 
-	console.timeEnd('createPdfStickers')
+	// console.timeEnd('createPdfStickers')
 
 	/**
 	 * Вывод
 	 */
-	// fs.writeFileSync('/Users/mac/Desktop/barcode-test.pdf', await pdf.save());
-
 	return pdf.save()
 }

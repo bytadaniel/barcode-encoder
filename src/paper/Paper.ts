@@ -26,15 +26,7 @@ export class Paper {
   }
 
   private organizeVertical(elements: StickerContract[]) {
-    console.log(elements.length, elements[0])
-    const stack = new Stack(
-      elements.reverse()
-      // elements.sort((a, b) => {
-      //   const aVolume = 2 * (a.sizeMM.width + a.sizeMM.height)
-      //   const bVolume = 2 * (b.sizeMM.width + b.sizeMM.height)
-      //   return aVolume - bVolume
-      // })
-    )
+    const stack = new Stack(elements.reverse())
 
     let canUseElement = true
     let isFirstElement = true
