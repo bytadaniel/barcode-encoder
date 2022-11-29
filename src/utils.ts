@@ -1,11 +1,35 @@
 import type { PDFFont } from 'pdf-lib'
 
+const searchFontSizeToFitRectangleCache = new Map<string, number>()
+function cleanupSearchFontSizeToFitRectangleCache() {
+  searchFontSizeToFitRectangleCache.clear()
+}
+
+const searchFontSizeTextToFitWidthCache = new Map<string, number>()
+function cleanupSearchFontSizeTextToFitWidthCache() {
+  searchFontSizeTextToFitWidthCache.clear()
+}
+
+
+let cacheUses = 0
+export function cleanupUtilsCache () {
+  console.log('Optimized', cacheUses, 'cpu-function executions')
+  cacheUses = 0
+  cleanupSearchFontSizeTextToFitWidthCache()
+  cleanupSearchFontSizeToFitRectangleCache()
+}
+
 /**
  * Найти такой размер шрифта, с которым текст будет немного меньше или равен определенной ширине в пикселях
  * 
  * Длина текста считается БЕЗ учета переносов строки
  */
 export function searchFontSizeTextToFitWidth (font: PDFFont, text: string, targetWidth: number) {
+  const cacheKey = `${font.name}-${text}-${targetWidth}`
+  if (searchFontSizeTextToFitWidthCache.has(cacheKey)) {
+    cacheUses++
+    return searchFontSizeTextToFitWidthCache.get(cacheKey)!
+  }
   let currentSize = 12
   let currentWidth = font.widthOfTextAtSize(text, currentSize)
 
@@ -27,6 +51,8 @@ export function searchFontSizeTextToFitWidth (font: PDFFont, text: string, targe
     currentSize = nextSize
     currentWidth = nextWidth
   }
+
+  searchFontSizeTextToFitWidthCache.set(cacheKey, currentSize)
 
   return currentSize
 }
@@ -71,12 +97,19 @@ export function searchFontSizeToFitRectangle (
   targetWidth: number,
   targetHeight: number
 ): number {
+  const cacheKey = `${font.name}-${lines.join('')}-${targetWidth}-${targetHeight}`
+
+  if (searchFontSizeToFitRectangleCache.has(cacheKey)) {
+    cacheUses++
+    return searchFontSizeToFitRectangleCache.get(cacheKey)!
+  }
+
   const largestLine = [...lines].sort((a, b) => b.length - a.length)[0]
 
   let size = 12
   let width = font.widthOfTextAtSize(largestLine, size)
   let lineHeight = font.heightAtSize(size, { descender: true })
-  let linePassHeight = lineHeight * 0.5
+  let linePassHeight = lineHeight * 0.7
   let height = (lineHeight * lines.length) + (linePassHeight * (lines.length - 1))
 
   while (true) {
@@ -127,6 +160,7 @@ export function searchFontSizeToFitRectangle (
     height = nextHeight
   }
 
+  searchFontSizeToFitRectangleCache.set(cacheKey, size)
   return size
 }
 

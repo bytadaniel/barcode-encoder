@@ -12,7 +12,8 @@ export function drawBarcodeEan13 (page: PDFPage, font: PDFFont, options: {
     _color?: RGB
 }) {
   const barcodeHeightScale = 0.8
-  const textWidthScale = 0.7
+  const barcodeWidthScale = 1
+  const textWidthScale = 0.9
   const textHeightScale = 1 - barcodeHeightScale
 
   if (options._color) {
@@ -26,8 +27,9 @@ export function drawBarcodeEan13 (page: PDFPage, font: PDFFont, options: {
   }
 
 
-  const barWidth = options.width / options.encoded.length
+  const barWidth = options.width * barcodeWidthScale / options.encoded.length
   const barHeight = options.height * barcodeHeightScale
+  const barcodeWidth = options.encoded.length * barWidth
     
   const textMaxHeight = options.height * textHeightScale
   const fontSize = Math.min(
@@ -35,24 +37,50 @@ export function drawBarcodeEan13 (page: PDFPage, font: PDFFont, options: {
     font.sizeAtHeight(textMaxHeight)
   )
 
-
-
   const textWidth = font.widthOfTextAtSize(options.text, fontSize)
   const textHeight = font.heightAtSize(fontSize)
 
-  options.encoded.split('').forEach((char, index) => {
-    const x = options.x + barWidth * index
-    const y = options.y + (options.height - barHeight)
-    if (char === '1') {
-      page.drawRectangle({
-        x,
-        y,
-        width: barWidth,
-        height: barHeight,
-        color: rgb(0, 0, 0)
-      })
-    }
-  })
+  const unions = options.encoded.split('').reduce(
+    (unions, char) => {
+        char !== unions[unions.length - 1]?.[0] ? unions.push([char]) : unions[unions.length - 1].push(char)
+        return unions
+    },
+    [] as string[][]
+  )
+
+  unions.reduce(
+    (cursor, union) => {
+      const x = options.x + ((options.width - barcodeWidth) / 2) + barWidth * cursor.index
+      const y = options.y + (options.height - barHeight)
+      if (union[0] === '1') {
+        page.drawRectangle({
+          x,
+          y,
+          width: barWidth * union.length,
+          height: barHeight,
+          color: rgb(0, 0, 0)
+        })
+      }
+
+      cursor.index += union.length
+      return cursor
+    },
+    { index: 0 } as { index: number }
+  )
+
+  // options.encoded.split('').forEach((char, index) => {
+  //   const x = options.x + ((options.width - barcodeWidth) / 2) + barWidth * index
+  //   const y = options.y + (options.height - barHeight)
+  //   if (char === '1') {
+  //     page.drawRectangle({
+  //       x,
+  //       y,
+  //       width: barWidth,
+  //       height: barHeight,
+  //       color: rgb(0, 0, 0)
+  //     })
+  //   }
+  // })
 
   page.moveTo(
     options.x + (options.width - textWidth) / 2, // x

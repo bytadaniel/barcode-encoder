@@ -48,6 +48,7 @@ export async function createPdfStickers (contract: StickersContract) {
 	 * Преобразование образов стикеров с количеством
 	 * к конкретному количеству сущностей стикеров, которые запрашиваются
 	 */
+	// console.time('contract.stickers.reduce')
 	const stickers = contract.stickers.reduce(
 		(contracts, commonContract) => {
 			for (let i = 0; i < (commonContract.count ?? 1); i++) {
@@ -80,12 +81,15 @@ export async function createPdfStickers (contract: StickersContract) {
 		},
 		[] as StickerContract[][]
 	).flat()
+	// console.timeEnd('contract.stickers.reduce')
   
 	/**
 	 * Преобразование сущностей стикеров к сущностям страниц
 	 * Расположение стикеров на страницах в оптимальной форме
 	 */
+	// console.time('arrangeElementsOnPapers')
 	const papers = arrangeElementsOnPapers(contract.page, stickers)
+	// console.timeEnd('arrangeElementsOnPapers')
 
 	/**
 	 * Отрисовка страниц со стикерами в PDF файле
@@ -146,6 +150,7 @@ export async function createPdfStickers (contract: StickersContract) {
 				const x = columnIndex * (stickerWidth + spaceBetween) + spaceBetween + paperPaddingWidth
 				const y = page.getHeight() - paperPaddingHeight - ((rowIndex + 1) * (stickerHeight + spaceBetween))
 
+				// console.time('drawSticker')
 				sticker.drawSticker(page, font, {
 					x,
 					y,
@@ -167,9 +172,12 @@ export async function createPdfStickers (contract: StickersContract) {
 						eac: element.eac
 					}
 				})
+				// console.timeEnd('drawSticker')
 			}
 		}
 	}
+
+	utils.cleanupUtilsCache()
 
 	// console.timeEnd('createPdfStickers')
 

@@ -6,8 +6,8 @@ import * as barcode from '../barcode'
 import * as utils from '../../utils'
 
 const barcodeAndTextHeightScaleMask = [
-  0.5,  // barcode-height
-  0.35, // text-height
+  0.35,  // barcode-height
+  0.55, // text-height
 ]
 
 const barcodeAndTextWidthScaleMask = [
