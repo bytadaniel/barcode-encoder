@@ -12,7 +12,10 @@ export function arrangeElementsOnPapers (pageContract: StickersContract['page'],
         do {
             const paper = new Paper(pageContract)
             paper.arrangeElementsOnPaper(elements)
-    
+
+            if (elements.length === paper.getUnusedElements().length) {
+                throw new Error('Such elements can not be placed on given paper size')
+            }
             papers.push(paper)
     
             elements = paper.getUnusedElements() // переприсваиваем элементы для условия выхода

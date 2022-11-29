@@ -4,15 +4,15 @@ import { arrangeElementsOnPapers } from "../paper/arrange-elements-on-papers"
 import * as utils from '../utils'
 import * as sticker from './sticker'
 import { FontNames } from '../core/font'
+import type { Dimensions } from '../paper/interface'
+
+type BarcodeType = 'EAN13' | 'CODE128'
 
 export interface StickerContract {
-  sizeMM: {
-    width: number,
-    height: number
-  },
+  sizeMM: Dimensions,
   barcode?: {
     input: string,
-    type: 'EAN13' | 'CODE128'
+    type: BarcodeType
   },
 	count?: number
 	text?: string,
@@ -25,18 +25,12 @@ export interface StickersContract {
   sticker: {
 		stroke: boolean,
 		eac: boolean,
-		separateBarcodeAndInfo?: boolean
-		spaceBetweenMM?: number
+		separateBarcodeAndInfo: boolean
+		spaceBetweenMM: number
 	},
 	page: {
-		sizeMM: {
-			width: number,
-			height: number
-		},
-		offsetMM?: {
-			width: number,
-			height: number
-		}
+		sizeMM: Dimensions,
+		offsetMM?: Dimensions
 	}
 }
 

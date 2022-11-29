@@ -2,68 +2,73 @@ import fs from 'fs'
 import { createPdfStickers } from "../src";
 
 (async function () {
-    const pdfStickers = await createPdfStickers({
-        page: {
-            sizeMM: {
-                width: 210,
-                height: 297
-            },
-            offsetMM: {
-                width: 15,
-                height: 10
-            }
-        },
-        sticker: {
-            stroke: true,
-            eac: true,
-            separateBarcodeAndInfo: false,
-            spaceBetweenMM: 1
-        },
-      stickers: [
-        {
-          sizeMM: {
-            width: 52,
-            height: 34
-            // width: 20,
-            // height: 10 // bug todo fix
-          },
-          barcode: {
-            input: '2008099808000',
-            type: 'CODE128'
-          },
-                text: [
-                    'браслет малахит',
-                    'Артикул: 45253152 Цв.: ярко-зеленый / Раз.: 18-21',
-                    'Страна: Россия',
-                    'Бренд: scarlet flower',
-                    '',
-                    'Товар подлежит обязательной сертификации'
-                ].join('\n'),
-          count: 25
-        },
-            {
-          sizeMM: {
-            width: 40,
-            height: 25
-            // width: 20,
-            // height: 10 // bug todo fix
-          },
-          barcode: {
-            input: '2008099808000',
-            type: 'EAN13'
-          },
-                text: [
-                    'браслет малахит',
-                    'Артикул: 45253152 Цв.: ярко-зеленый / Раз.: 18-21',
-                    'Страна: Россия',
-                    'Бренд: scarlet flower',
-                    '',
-                    'Товар подлежит обязательной сертификации'
-                ].join('\n'),
-          count: 25
-        }
-      ]
-    })
+	/**
+	 * export interface StickerContract {
+			sizeMM: Dimensions,
+			barcode?: {
+				input: string,
+				type: BarcodeType
+			},
+			count?: number
+			text?: string,
+			spaceBetweenMM?: number,
+			eac?: boolean
+		}
 
-    fs.writeFileSync('/Users/mac/Desktop/barcode-test.pdf', pdfStickers);
+		export interface StickersContract {
+			stickers: StickerContract[],
+			sticker: {
+				stroke: boolean,
+				eac: boolean,
+				separateBarcodeAndInfo: boolean
+				spaceBetweenMM: number
+			},
+			page: {
+				sizeMM: Dimensions,
+				offsetMM?: Dimensions
+			}
+		}
+	 */
+	const pdfStickers = await createPdfStickers({
+		page: {
+			sizeMM: { width: 52, height: 34 },
+			offsetMM: { width: 0, height: 0 }
+		},
+		sticker: {
+			stroke: true,
+			eac: false,
+			separateBarcodeAndInfo: false,
+			spaceBetweenMM: 0
+		},
+		stickers: [
+			{
+				sizeMM: { width: 52, height: 34 },
+				barcode: { input: '2008099808000', type: 'CODE128' },
+				text: [
+					'браслет малахит',
+					'Артикул: 45253152 Цв.: ярко-зеленый / Раз.: 18-21',
+					'Страна: Россия',
+					'Бренд: scarlet flower',
+					'',
+					'Товар подлежит обязательной сертификации'
+				].join('\n'),
+				count: 25
+			},
+			{
+				sizeMM: { width: 52, height: 34 },
+				barcode: { input: '2008099808000', type: 'EAN13' },
+				text: [
+					'браслет малахит',
+					'Артикул: 45253152 Цв.: ярко-зеленый / Раз.: 18-21',
+					'Страна: Россия',
+					'Бренд: scarlet flower',
+					'',
+					'Товар подлежит обязательной сертификации'
+				].join('\n'),
+				count: 25
+			}
+		]
+	})
+
+	fs.writeFileSync('/Users/mac/Desktop/barcode-test.pdf', pdfStickers);
 })()
